@@ -45,6 +45,7 @@ public class NotepadDisplay extends JFrame {
         textArea1.setText(noFileText);
 
         setUpTextAreaListener();
+        setUpNewButton();
         setUpOpenButton();
         setUpSaveButton();
 
@@ -76,6 +77,15 @@ public class NotepadDisplay extends JFrame {
         });
     }
 
+    private void setUpNewButton() {
+        btnNewFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newFileGUI();
+            }
+        });
+    }
+
     private void setUpOpenButton() {
         btnOpenFile.addActionListener(new ActionListener() {
             @Override
@@ -93,6 +103,26 @@ public class NotepadDisplay extends JFrame {
                 saveFileGUI();
             }
         });
+    }
+
+    private void newFileGUI() {
+        String fileName = JOptionPane.showInputDialog("Enter the file name: ");
+        if (fileName == null) {
+            JOptionPane.showMessageDialog(NotepadDisplay.this, "Operation was unsuccessful");
+            return;
+        } else if(!fileName.contains(".txt")) {
+            fileName = fileName + ".txt";
+        }
+
+        String path = fileOps.newFile(NotepadDisplay.this, fileName);
+
+        if (path == null) {
+            JOptionPane.showMessageDialog(NotepadDisplay.this, "Operation was unsuccessful");
+            return;
+        }
+
+        System.out.println(path);
+        openFileGUI(new File(path));
     }
 
     private void openFileGUI(File file) {

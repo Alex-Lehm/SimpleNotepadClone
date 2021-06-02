@@ -12,6 +12,41 @@ public class FileOperations implements IFileOperations {
 
     @Override
     public String newFile(JFrame parent, String fileName) {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Select a directory");
+        //fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        fc.addChoosableFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if(f.isDirectory())
+                    return true;
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Directory";
+            }
+        });
+
+        int choice = fc.showOpenDialog(parent);
+
+        if (choice == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            String path = file.getPath() + "/" + fileName;
+
+            if (new File(path).exists()) {
+                JOptionPane.showMessageDialog(parent, "A file by that name already exists!");
+                return null;
+            }
+
+            saveFile(Path.of(path), "");
+
+            return path;
+        }
+
         return null;
     }
 
