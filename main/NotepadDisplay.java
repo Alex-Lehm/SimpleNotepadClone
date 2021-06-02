@@ -26,6 +26,7 @@ public class NotepadDisplay extends JFrame {
     private final String noFileText = "No file selected.";
 
     private final Color disabledTextAreaColor = Color.LIGHT_GRAY;
+    private final Color enabledTextAreaColor = Color.WHITE;
 
     private Path CURRENT_FILE_PATH;
 
@@ -80,6 +81,12 @@ public class NotepadDisplay extends JFrame {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(!textArea1.isEnabled()) {
+            btnSaveFile.setEnabled(true);
+            textArea1.setEnabled(true);
+            textArea1.setBackground(enabledTextAreaColor);
         }
     }
 }
