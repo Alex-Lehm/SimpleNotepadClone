@@ -85,6 +85,7 @@ public class NotepadDisplay extends JFrame {
         textArea1.setText(noFileText);
 
         setUpTextAreaListener();
+        setUpNewWindowButton();
         setUpNewButton();
         setUpOpenButton();
         setUpSaveButton();
@@ -116,6 +117,17 @@ public class NotepadDisplay extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 btnSaveFile.setEnabled(true);
                 unsaved = true;
+            }
+        });
+    }
+
+    private void setUpNewWindowButton() {
+        btnNewWindow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NotepadDisplay window = new NotepadDisplay();
+                window.toFront();
+                window.setLocation(NotepadDisplay.this.getX() + 15, NotepadDisplay.this.getY() + 15);
             }
         });
     }
