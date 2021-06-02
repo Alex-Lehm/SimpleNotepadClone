@@ -1,6 +1,8 @@
 package main;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +44,7 @@ public class NotepadDisplay extends JFrame {
         lblTitle.setText(noFileText);
         textArea1.setText(noFileText);
 
+        setUpTextAreaListener();
         setUpOpenButton();
         setUpSaveButton();
 
@@ -49,6 +52,28 @@ public class NotepadDisplay extends JFrame {
         textArea1.setEnabled(false);
         textArea1.setBackground(disabledTextAreaColor);
         textArea1.setDisabledTextColor(Color.BLACK);
+    }
+
+    private void setUpTextAreaListener() {
+        textArea1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(lblTitle.getText().equals(noFileText))
+                    return;
+
+                btnSaveFile.setEnabled(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                btnSaveFile.setEnabled(true);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                btnSaveFile.setEnabled(true);
+            }
+        });
     }
 
     private void setUpOpenButton() {
