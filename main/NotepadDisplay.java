@@ -119,9 +119,7 @@ public class NotepadDisplay extends JFrame {
         }
 
         if(!textArea1.isEnabled()) {
-            btnSaveFile.setEnabled(true);
-            textArea1.setEnabled(true);
-            textArea1.setBackground(enabledTextAreaColor);
+            enableTextAndSaveButton();
         }
     }
 
@@ -138,11 +136,15 @@ public class NotepadDisplay extends JFrame {
         JOptionPane.showMessageDialog(NotepadDisplay.this, "Saved successfully");
 
         if(!textArea1.isEnabled()) {
-            btnSaveFile.setEnabled(true);
-            textArea1.setEnabled(true);
-            textArea1.setBackground(enabledTextAreaColor);
+            enableTextAndSaveButton();
         }
 
         btnSaveFile.setEnabled(false);
+    }
+
+    private void enableTextAndSaveButton() {
+        btnSaveFile.setEnabled(true);
+        textArea1.setEnabled(true);
+        textArea1.setBackground(enabledTextAreaColor);
     }
 }
