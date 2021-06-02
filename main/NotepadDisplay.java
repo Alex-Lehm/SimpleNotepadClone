@@ -6,6 +6,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,6 +34,8 @@ public class NotepadDisplay extends JFrame {
 
     private Path CURRENT_FILE_PATH;
 
+    private boolean unsaved = false;
+
     FileOperations fileOps = new FileOperations();
 
     public NotepadDisplay() {
@@ -40,6 +44,42 @@ public class NotepadDisplay extends JFrame {
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                confirmSaveOnExit();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
 
         lblTitle.setText(noFileText);
         textArea1.setText(noFileText);
@@ -63,16 +103,19 @@ public class NotepadDisplay extends JFrame {
                     return;
 
                 btnSaveFile.setEnabled(true);
+                unsaved = true;
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 btnSaveFile.setEnabled(true);
+                unsaved = true;
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 btnSaveFile.setEnabled(true);
+                unsaved = true;
             }
         });
     }
@@ -150,6 +193,7 @@ public class NotepadDisplay extends JFrame {
 
         if(!textArea1.isEnabled()) {
             enableTextAndSaveButton();
+            unsaved = false;
         }
     }
 
@@ -170,11 +214,36 @@ public class NotepadDisplay extends JFrame {
         }
 
         btnSaveFile.setEnabled(false);
+        unsaved = false;
     }
 
     private void enableTextAndSaveButton() {
         btnSaveFile.setEnabled(true);
         textArea1.setEnabled(true);
         textArea1.setBackground(enabledTextAreaColor);
+    }
+
+    private void confirmSaveOnExit() {
+        if(!unsaved)
+            return;
+
+        String[] options = {"Yes", "No"};
+
+        int choice = JOptionPane.showOptionDialog(NotepadDisplay.this, "This file is unsaved. Would you like to save it now?",
+                "Unsaved File", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+                options[0]);
+
+        switch(choice) {
+            case 0:
+                saveFileGUI();
+                break;
+            case 1:
+                unsaved = false;
+                break;
+            default:
+                System.out.println("Something has gone horribly horribly wrong");
+                unsaved = false;
+                break;
+        }
     }
 }
