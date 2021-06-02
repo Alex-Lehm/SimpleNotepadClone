@@ -3,6 +3,8 @@ package main;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 
 public class FileOperations implements IFileOperations {
@@ -49,6 +51,16 @@ public class FileOperations implements IFileOperations {
 
     @Override
     public boolean saveFile(Path filePath, String textToWrite) {
+        try {
+            PrintWriter writer = new PrintWriter(filePath.toString());
+            writer.write(textToWrite);
+            writer.close();
+
+            return true;
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+
         return false;
     }
 }

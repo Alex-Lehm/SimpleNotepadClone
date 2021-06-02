@@ -43,6 +43,7 @@ public class NotepadDisplay extends JFrame {
         textArea1.setText(noFileText);
 
         setUpOpenButton();
+        setUpSaveButton();
 
         btnSaveFile.setEnabled(false);
         textArea1.setEnabled(false);
@@ -56,6 +57,15 @@ public class NotepadDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 File file = fileOps.openFile(NotepadDisplay.this);
                 openFileGUI(file);
+            }
+        });
+    }
+
+    private void setUpSaveButton() {
+        btnSaveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveFileGUI();
             }
         });
     }
@@ -88,5 +98,26 @@ public class NotepadDisplay extends JFrame {
             textArea1.setEnabled(true);
             textArea1.setBackground(enabledTextAreaColor);
         }
+    }
+
+    private void saveFileGUI() {
+        if (CURRENT_FILE_PATH == null) {
+            JOptionPane.showMessageDialog(NotepadDisplay.this, "No file open. Please select 'New' or 'Open'.");
+            return;
+        }
+
+        String text = textArea1.getText();
+
+        fileOps.saveFile(CURRENT_FILE_PATH, text);
+
+        JOptionPane.showMessageDialog(NotepadDisplay.this, "Saved successfully");
+
+        if(!textArea1.isEnabled()) {
+            btnSaveFile.setEnabled(true);
+            textArea1.setEnabled(true);
+            textArea1.setBackground(enabledTextAreaColor);
+        }
+
+        btnSaveFile.setEnabled(false);
     }
 }
